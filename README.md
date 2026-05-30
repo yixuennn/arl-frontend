@@ -3,6 +3,9 @@
 ## Project Description
 SpeakShelf is an Angular frontend application connected to a Spring Boot backend. It allows users to manage a reading list by adding, viewing, searching, updating, deleting, and listening to reading items using the Web Speech API.
 
+## Group Members
+Add your group members here.
+
 ## Features
 - Login page with Basic Auth
 - View reading items with pagination
@@ -36,9 +39,13 @@ http://localhost:4200
 ## Login Credentials
 Use the username and password configured in the backend Spring Security.
 
-Example:
+User:
 - Username: user
-- Password: password123
+- Password: user123
+
+Admin:
+- Username: admin
+- Password: admin123
 
 ## How to Run
 
@@ -60,24 +67,3 @@ http://localhost:4200
 | POST | /api/books | Add book |
 | PUT | /api/books/{id} | Update book |
 | DELETE | /api/books/{id} | Delete book |
-
-## Demo Flow
-1. Login
-2. View paginated reading list
-3. Search reading item
-4. Add new item
-5. Edit item
-6. Delete item
-7. Use read-aloud button
-
-## Screenshots
-Include screenshots of:
-1. Reading list with pagination
-2. Search result
-3. Form validation
-
-## Group Members
-Add your group members here.
-
-## GitHub Repository
-Submit the private GitHub repository link on LMS.
