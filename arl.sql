@@ -1,0 +1,11 @@
+CREATE DATABASE IF NOT EXISTS arl_db;
+
+USE arl_db;
+
+CREATE TABLE IF NOT EXISTS books (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description VARCHAR(500)
+);

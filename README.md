@@ -1,59 +1,83 @@
-# ArlFrontend
+# SpeakShelf - Accessible Reading List Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+## Project Description
+SpeakShelf is an Angular frontend application connected to a Spring Boot backend. It allows users to manage a reading list by adding, viewing, searching, updating, deleting, and listening to reading items using the Web Speech API.
 
-## Development server
+## Features
+- Login page with Basic Auth
+- View reading items with pagination
+- Search by title, author, category, or description
+- Add new reading item
+- Edit existing reading item
+- Delete reading item
+- Client-side form validation
+- Error messages for failed API requests
+- Read-aloud feature using Web Speech API
 
-To start a local development server, run:
+## Technologies Used
+- Angular
+- TypeScript
+- HTML
+- CSS
+- HttpClient
+- Angular Forms
+- Spring Boot backend
+- MySQL database
 
-```bash
+## Backend Requirement
+Make sure the backend is running at:
+
+http://localhost:8080/api/books
+
+The backend must allow CORS from:
+
+http://localhost:4200
+
+## Login Credentials
+Use the username and password configured in the backend Spring Security.
+
+Example:
+- Username: user
+- Password: password123
+
+## How to Run
+
+### 1. Install dependencies
+npm install
+
+### 2. Run Angular frontend
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 3. Open in browser
+http://localhost:4200
 
-## Code scaffolding
+## API Endpoints Used
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | /api/books?page=0&size=5 | List books |
+| GET | /api/books?q=keyword&page=0&size=5 | Search books |
+| POST | /api/books | Add book |
+| PUT | /api/books/{id} | Update book |
+| DELETE | /api/books/{id} | Delete book |
 
-```bash
-ng generate component component-name
-```
+## Demo Flow
+1. Login
+2. View paginated reading list
+3. Search reading item
+4. Add new item
+5. Edit item
+6. Delete item
+7. Use read-aloud button
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Screenshots
+Include screenshots of:
+1. Reading list with pagination
+2. Search result
+3. Form validation
 
-```bash
-ng generate --help
-```
+## Group Members
+Add your group members here.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## GitHub Repository
+Submit the private GitHub repository link on LMS.

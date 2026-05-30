@@ -1,0 +1,265 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h1>SpeakShelf</h1>
+      <p>Add, search, and listen to your digital shelf.</p>
+
+      <div class="user-box">
+        <span class="user-label">Logged in as</span>
+
+        <div class="user-role" *ngIf="currentRole === 'Admin'; else userRole">
+          Admin
+        </div>
+
+        <ng-template #userRole>
+          <div class="user-role">
+            User
+          </div>
+        </ng-template>
+      </div>
+
+      <button type="button" class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <section class="intro-panel">
+      <h2>My Reading Shelf</h2>
+      <p>Manage your books and articles in one space.</p>
+    </section>
+
+    <p class="message" *ngIf="message">
+      {{ message }}
+    </p>
+
+    <section class="shelf-layout">
+      <div class="left-column">
+        <div class="form-panel">
+          <h2>{{ isEditing ? 'Update Reading Item' : 'Add Reading Item' }}</h2>
+
+          <form (ngSubmit)="saveBook(bookForm)" #bookForm="ngForm" novalidate>
+            <label for="title">Title <span class="required">*</span></label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              [(ngModel)]="book.title"
+              required
+              minlength="2"
+              maxlength="150"
+              #title="ngModel"
+              placeholder="Enter title"
+              [class.input-invalid]="title.invalid && (title.touched || bookForm.submitted)"
+            >
+
+            <small class="error-text" *ngIf="title.invalid && (title.touched || bookForm.submitted)">
+              <span *ngIf="title.errors?.['required']">Title is required.</span>
+              <span *ngIf="title.errors?.['minlength']">Title must be at least 2 characters.</span>
+              <span *ngIf="title.errors?.['maxlength']">Title cannot exceed 150 characters.</span>
+            </small>
+
+            <label for="author">Author <span class="required">*</span></label>
+            <input
+              id="author"
+              type="text"
+              name="author"
+              [(ngModel)]="book.author"
+              required
+              minlength="2"
+              maxlength="100"
+              #author="ngModel"
+              placeholder="Enter author"
+              [class.input-invalid]="author.invalid && (author.touched || bookForm.submitted)"
+            >
+
+            <small class="error-text" *ngIf="author.invalid && (author.touched || bookForm.submitted)">
+              <span *ngIf="author.errors?.['required']">Author is required.</span>
+              <span *ngIf="author.errors?.['minlength']">Author must be at least 2 characters.</span>
+              <span *ngIf="author.errors?.['maxlength']">Author cannot exceed 100 characters.</span>
+            </small>
+
+            <label for="category">Category <span class="required">*</span></label>
+            <input
+              id="category"
+              type="text"
+              name="category"
+              [(ngModel)]="book.category"
+              required
+              minlength="2"
+              maxlength="50"
+              #category="ngModel"
+              placeholder="Enter category"
+              [class.input-invalid]="category.invalid && (category.touched || bookForm.submitted)"
+            >
+
+            <small class="error-text" *ngIf="category.invalid && (category.touched || bookForm.submitted)">
+              <span *ngIf="category.errors?.['required']">Category is required.</span>
+              <span *ngIf="category.errors?.['minlength']">Category must be at least 2 characters.</span>
+              <span *ngIf="category.errors?.['maxlength']">Category cannot exceed 50 characters.</span>
+            </small>
+
+            <label for="description">Short Description <span class="required">*</span></label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="book.description"
+              required
+              minlength="5"
+              maxlength="500"
+              #description="ngModel"
+              placeholder="Enter short description"
+              [class.input-invalid]="description.invalid && (description.touched || bookForm.submitted)"
+            ></textarea>
+
+            <div class="field-helper">
+              {{ book.description ? book.description.length : 0 }}/500 characters
+            </div>
+
+            <small class="error-text" *ngIf="description.invalid && (description.touched || bookForm.submitted)">
+              <span *ngIf="description.errors?.['required']">Description is required.</span>
+              <span *ngIf="description.errors?.['minlength']">Description must be at least 5 characters.</span>
+              <span *ngIf="description.errors?.['maxlength']">Description cannot exceed 500 characters.</span>
+            </small>
+
+            <div class="button-row">
+              <button type="submit" class="primary-btn" [disabled]="isSaving">
+                {{ isSaving ? 'Saving...' : (isEditing ? 'Update' : 'Add') }}
+              </button>
+
+              <button
+                type="button"
+                class="light-btn"
+                *ngIf="isEditing"
+                (click)="resetForm(bookForm)"
+                [disabled]="isSaving"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <section class="search-panel">
+          <h2>Search Reading Item</h2>
+
+          <input
+            type="text"
+            name="searchKeyword"
+            [(ngModel)]="searchKeyword"
+            placeholder="Search by title, author, category, or description"
+          >
+
+          <div class="button-row">
+            <button
+              type="button"
+              class="primary-btn"
+              (click)="searchBooks()"
+              [disabled]="isListLoading"
+            >
+              Search
+            </button>
+
+            <button
+              type="button"
+              class="light-btn"
+              (click)="showAllBooks()"
+              [disabled]="isListLoading"
+            >
+              Show All
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div class="list-panel">
+        <div class="list-header">
+          <h2>Reading Collection</h2>
+          <span>{{ books.length }} item(s)</span>
+        </div>
+
+        <div class="empty" *ngIf="isListLoading && books.length === 0">
+          Loading...
+        </div>
+
+        <div class="empty" *ngIf="!isListLoading && books.length === 0">
+          {{ emptyMessage }}
+        </div>
+
+        <article class="book-item" *ngFor="let b of books">
+          <div class="book-main">
+            <span class="category-tag">{{ b.category }}</span>
+
+            <div class="book-title-row">
+              <h3>{{ b.title }}</h3>
+
+              <button
+                type="button"
+                class="speaker-btn"
+                title="Read aloud"
+                aria-label="Read aloud"
+                (click)="readAloud(b)"
+              >
+                🔊
+              </button>
+            </div>
+
+            <p class="author">by {{ b.author }}</p>
+            <p class="description">{{ b.description }}</p>
+          </div>
+
+          <div class="book-actions">
+            <button
+              type="button"
+              class="small-btn stop-btn"
+              (click)="stopReading()"
+            >
+              Stop
+            </button>
+
+            <button
+              type="button"
+              class="small-btn edit-btn"
+              (click)="editBook(b)"
+              [disabled]="isSaving"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="small-btn danger-btn"
+              (click)="deleteBook(b.id)"
+              [disabled]="isSaving"
+            >
+              Delete
+            </button>
+          </div>
+        </article>
+
+        <div class="pagination" *ngIf="totalPages > 0">
+          <button
+            type="button"
+            class="light-btn"
+            (click)="previousPage()"
+            [disabled]="page === 0 || isListLoading"
+          >
+            Previous
+          </button>
+
+          <span>Page {{ page + 1 }} of {{ totalPages }}</span>
+
+          <button
+            type="button"
+            class="light-btn"
+            (click)="nextPage()"
+            [disabled]="page + 1 >= totalPages || isListLoading"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

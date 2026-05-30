@@ -1,0 +1,40 @@
+<div class="login-page">
+  <section class="login-panel">
+    <div class="login-brand">
+      <h1>SpeakShelf</h1>
+      <p>Read, search, and listen to your digital shelf.</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm" novalidate>
+      <h2>Login</h2>
+
+      <label for="username">Username</label>
+      <input
+        id="username"
+        type="text"
+        name="username"
+        [(ngModel)]="username"
+        required
+        placeholder="Enter username"
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+        placeholder="Enter password"
+      >
+
+      <button type="submit" class="primary-btn full-btn" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+      <p class="message error-message" *ngIf="loginMessage">
+        {{ loginMessage }}
+      </p>
+    </form>
+  </section>
+</div>
