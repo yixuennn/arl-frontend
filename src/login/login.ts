@@ -24,16 +24,34 @@ export class Login {
     }
 
     const cleanUsername = this.username.trim();
+    const cleanPassword = this.password.trim();
 
-    localStorage.setItem('username', cleanUsername);
-    localStorage.setItem('password', this.password.trim());
+    if (cleanUsername === 'admin' && cleanPassword === 'admin123') {
 
-    if (cleanUsername === 'admin') {
+      // Backend credentials
+      localStorage.setItem('username', 'user');
+      localStorage.setItem('password', 'password123');
+
+      // Frontend role
       localStorage.setItem('role', 'ADMIN');
-    } else {
-      localStorage.setItem('role', 'USER');
+
+      this.router.navigate(['/dashboard']);
+      return;
     }
 
-    this.router.navigate(['/dashboard']);
+    if (cleanUsername === 'user' && cleanPassword === 'user123') {
+
+      // Backend credentials
+      localStorage.setItem('username', 'user');
+      localStorage.setItem('password', 'password123');
+
+      // Frontend role
+      localStorage.setItem('role', 'USER');
+
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+
+    this.loginMessage = 'Invalid username or password.';
   }
 }
